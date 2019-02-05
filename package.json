@@ -8,12 +8,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "gitolite@git.swind.sk:node-packages/logger"
+    "url": "git.swind.sk:node-packages/logger"
   },
   "keywords": [
     "logger",
     "winston"
   ],
   "author": "Martin Irha",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "colors": "latest",
+    "optimist": "latest",
+    "winston": "<3.0.0",
+    "winston-syslog-posix": "<3.0.0"
+  }
 }
