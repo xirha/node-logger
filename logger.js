@@ -45,6 +45,21 @@ let logger = new winston.Logger({
     exitOnError: false
 });
 
+logger.request = function(req, res, error) {
+    let date = new Date(); // .toUTCString();
+    if (error) {
+        logger.error(
+            '[%s] "%s %s" Error (%s): "%s"',
+            date, req.method.red, req.href,
+            error.code, error.errno
+        );
+    }
+    else {
+        logger.debug('[%s] "%s %s"',
+            date, req.method.cyan, req.href.cyan);
+    }
+};
+
 module.exports = logger;
 module.exports.stream = {
     write: function(message, encoding){
