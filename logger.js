@@ -4,65 +4,59 @@
 'use strict';
 
 let argv = require("optimist").argv;
-
-let winston     = require('winston'),
-    colors      = require('colors');
-
+let winston     = require('winston');
 require("winston-syslog-posix");
-
 winston.emitErrs = true;
 
-let transports = [];
-
-let consoleLevel = 'info';
-
-if(argv.debug){
-    consoleLevel = 'debug';
-}
-
-if(argv.S || argv.syslog) {
-    transports.push(
-        new winston.transports.SyslogPosix({
-            level: consoleLevel,
-            handleExceptions: false,
-            json: true,
-            colorize: false
-        })
-    );
-} else {
-    transports.push(
-        new winston.transports.Console({
-            level: consoleLevel,
-            handleExceptions: false,
-            json: false,
-            colorize: true
-        })
-    );
-}
-
-let logger = new winston.Logger({
-    transports: transports,
-    exitOnError: false
-});
-
-logger.request = function(req, res, error) {
-    let date = new Date(); // .toUTCString();
-    if (error) {
-        logger.error(
-            '[%s] "%s %s" Error (%s): "%s"',
-            date, req.method.red, req.href,
-            error.code, error.errno
+module.exports = function(label){
+    let transports = [];
+    if(argv.S || argv.syslog) {
+        transports.push(
+            new winston.transports.SyslogPosix({
+                level: argv.debug ? 'debug' : 'info',
+                handleExceptions: false,
+                json: true,
+                colorize: true,
+                label: label
+            })
+        );
+    } else {
+        transports.push(
+            new winston.transports.Console({
+                level: argv.debug ? 'debug' : 'info',
+                handleExceptions: false,
+                json: false,
+                colorize: true,
+                label: label,
+                timestamp: true
+            })
         );
     }
-    else {
-        logger.debug('[%s] "%s %s"',
-            date, req.method.cyan, req.href.cyan);
-    }
-};
 
-module.exports = logger;
+    let module = new winston.Logger({
+        transports: transports,
+        exitOnError: false
+    });
+
+    module.request = function(req, res, error) {
+        let date = new Date(); // .toUTCString();
+        if (error) {
+            module.error(
+                '[%s] "%s %s" Error (%s): "%s"',
+                date, req.method.red, req.href,
+                error.code, error.errno
+            );
+        }
+        else {
+            module.debug('[%s] "%s %s"',
+                date, req.method.cyan, req.href.cyan);
+        }
+    };
+
+    return module;
+};
 module.exports.stream = {
     write: function(message, encoding){
-        logger.info(message);
+        module.info(message);
     }
 };
