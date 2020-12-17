@@ -17,7 +17,8 @@ module.exports = function(label){
                 handleExceptions: false,
                 json: true,
                 colorize: true,
-                label: label
+                label: label,
+                identity: label || process.title
             })
         );
     } else {
