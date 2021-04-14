@@ -39,21 +39,28 @@ module.exports = function(label){
         exitOnError: false
     });
 
-    module.request = function(req, res, error) {
-        let date = new Date(); // .toUTCString();
-        if (error) {
-            module.error(
-                '[%s] "%s %s" Error (%s): "%s"',
-                date, req.method.red, req.href,
-                error.code, error.errno
-            );
-        }
-        else {
-            module.debug('[%s] "%s %s"',
-                date, req.method.cyan, req.href.cyan);
-        }
+    module.logRequest = function(req, res, args, duration) {
+        let FgBlack = "\x1b[30m";
+        let FgRed = "\x1b[31m";
+        let FgGreen = "\x1b[32m";
+        let FgYellow = "\x1b[33m";
+        let FgBlue = "\x1b[34m";
+        let FgMagenta = "\x1b[35m";
+        let FgCyan = "\x1b[36m";
+        let FgWhite = "\x1b[37m";
+        let FgReset = "\x1b[0m";
+        
+        let color = res.statusCode < 400 ? FgGreen : FgRed;
+        let color_ms = duration > 5000 ? FgRed : (duration > 1000 ? FgYellow : FgReset);
+        
+        module.debug(req.method + ' '
+            + FgCyan + (typeof req.url == 'object' ? req.url.href : req.url) + FgReset + ' '
+            + color + res.statusCode + FgReset + ' '
+            + color_ms + duration + "ms " + FgReset
+            + color + (typeof args[0] == 'object' && res.statusCode >= 400 ? args[0].toString() : '') + FgReset
+        );
     };
-
+    
     return module;
 };
 module.exports.stream = {
