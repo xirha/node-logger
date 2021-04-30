@@ -1,5 +1,5 @@
 {
-  "name": "logger",
+  "name": "node-logger",
   "version": "1.0.2",
   "description": "Nodejs winston logger wrapper",
   "main": "logger.js",
