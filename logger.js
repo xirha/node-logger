@@ -57,7 +57,6 @@ module.exports = function(label){
             + FgCyan + (typeof req.url == 'object' ? req.url.href : req.url) + FgReset + ' '
             + color + res.statusCode + FgReset + ' '
             + color_ms + duration + "ms " + FgReset
-            + color + (args != null && typeof args[0] == 'object' && res.statusCode >= 400 ? args[0].toString() : '') + FgReset
         );
     };
     
