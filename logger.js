@@ -54,8 +54,8 @@ module.exports = function(label){
         let color_ms = duration > 5000 ? FgRed : (duration > 1000 ? FgYellow : FgReset);
         
         module.debug(req.method + ' '
-            + FgCyan + (typeof req.url == 'object' ? req.url.href : req.url) + FgReset + ' '
-            + color + res.statusCode + FgReset + ' '
+            + FgCyan + (typeof req.uri == 'object' ? req.uri.href : req.uri) + FgReset + ' '
+            + color + res.statusCode + ' (' + res.statusMessage + ')' + FgReset +  ' '
             + color_ms + duration + "ms " + FgReset
         );
     };
