@@ -5,34 +5,21 @@
 
 let argv = require("optimist").argv;
 let winston     = require('winston');
-require("winston-syslog-posix");
 winston.emitErrs = true;
 
 module.exports = function(label){
     let transports = [];
-    if(argv.S || argv.syslog) {
-        transports.push(
-            new winston.transports.SyslogPosix({
-                level: argv.debug ? 'debug' : 'info',
-                handleExceptions: false,
-                json: true,
-                colorize: true,
-                label: label,
-                identity: label || process.title
-            })
-        );
-    } else {
-        transports.push(
-            new winston.transports.Console({
-                level: argv.debug ? 'debug' : 'info',
-                handleExceptions: false,
-                json: false,
-                colorize: true,
-                label: label,
-                timestamp: true
-            })
-        );
-    }
+    transports.push(
+        new winston.transports.Console({
+            level: argv.debug ? 'debug' : 'info',
+            handleExceptions: false,
+            json: false,
+            colorize: true,
+            label: label,
+            timestamp: true
+        })
+    );
+    
 
     let module = new winston.Logger({
         transports: transports,

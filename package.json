@@ -1,6 +1,6 @@
 {
   "name": "node-logger",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Nodejs winston logger wrapper",
   "main": "logger.js",
   "scripts": {
@@ -15,7 +15,6 @@
   "dependencies": {
     "colors": "latest",
     "optimist": "latest",
-    "winston": "<3.0.0",
-    "winston-syslog-posix": "<3.0.0"
+    "winston": "<3.0.0"
   }
 }
