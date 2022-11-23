@@ -1,20 +1,16 @@
 {
   "name": "node-logger",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "Nodejs winston logger wrapper",
   "main": "logger.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git.swind.sk:node-packages/logger"
-  },
   "keywords": [
     "logger",
     "winston"
   ],
-  "author": "Martin Irha",
+  "author": "Martin Irha <irha.martin@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "colors": "latest",

@@ -39,7 +39,7 @@ module.exports = function(label){
         exitOnError: false
     });
 
-    module.logRequest = function(req, res, args, duration) {
+    module.logRequest = function(req, res, err) {
         let FgBlack = "\x1b[30m";
         let FgRed = "\x1b[31m";
         let FgGreen = "\x1b[32m";
@@ -50,14 +50,22 @@ module.exports = function(label){
         let FgWhite = "\x1b[37m";
         let FgReset = "\x1b[0m";
         
-        let color = res.statusCode < 400 ? FgGreen : FgRed;
-        let color_ms = duration > 5000 ? FgRed : (duration > 1000 ? FgYellow : FgReset);
-        
-        module.debug(req.method + ' '
-            + FgCyan + (typeof req.uri == 'object' ? req.uri.href : req.uri) + FgReset + ' '
-            + color + res.statusCode + ' (' + res.statusMessage + ')' + FgReset +  ' '
-            + color_ms + duration + "ms " + FgReset
-        );
+        if(err != undefined){
+            module.error(req.method + ' '
+                + FgCyan + (typeof req.uri == 'object' ? req.uri.href : req.uri) + FgReset + ' '
+                + FgRed + err + ' (' + err.code + ')' + FgReset
+            )
+        } else {
+            let color = res.statusCode < 400 ? FgGreen : FgRed;
+            let duration = res != undefined && res.elapsedTime != undefined ? res.elapsedTime : '?';
+            let color_ms = duration > 5000 ? FgRed : (duration > 1000 ? FgYellow : FgReset);
+
+            module.debug(req.method + ' '
+                + FgCyan + (typeof req.uri == 'object' ? req.uri.href : req.uri) + FgReset + ' '
+                + color + res.statusCode + ' (' + res.statusMessage + ')' + FgReset +  ' '
+                + color_ms + duration + "ms " + FgReset
+            );
+        }
     };
     
     return module;
